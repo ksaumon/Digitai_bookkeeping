@@ -6,6 +6,8 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 import ru.semen.springcourse.dao.PersonDAO;
 import ru.semen.springcourse.models.Person;
+import ru.semen.springcourse.services.PeopleService;
+
 
 /**
  * @author Neil Alishev
@@ -13,11 +15,11 @@ import ru.semen.springcourse.models.Person;
 @Component
 public class PersonValidator implements Validator {
 
-    private final PersonDAO personDAO;
+    private final PeopleService peopleService;
 
     @Autowired
-    public PersonValidator(PersonDAO personDAO) {
-        this.personDAO = personDAO;
+    public PersonValidator(PeopleService peopleService) {
+        this.peopleService = peopleService;
     }
 
     @Override
@@ -29,7 +31,7 @@ public class PersonValidator implements Validator {
     public void validate(Object o, Errors errors) {
         Person person = (Person) o;
 
-        if (personDAO.getPersonByFullName(person.getFullName()).isPresent())
+        if (peopleService.getPersonByFullName(person.getFullName()).isPresent())
             errors.rejectValue("fullName", "", "Человек с таким ФИО уже существует");
     }
 }
